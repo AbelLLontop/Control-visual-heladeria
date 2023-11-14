@@ -1,49 +1,36 @@
-import DashBoard from "./components/DashBoard";
+import Pasteurizacion from "./components/Pasteurizacion";
+import PreparacionMateriaPrima from "./components/PreparacionMateriaPrima";
+import PreparacionMezcla from "./components/PreparacionMezcla";
 
 export const routesLinks = [
   {
     name: "Preparacion Material Prima",
     path: "/preparacion-material-prima",
-    element: <DashBoard />,
+    element: <PreparacionMateriaPrima />,
   },
   {
     name: "Pasteurizacion",
     path: "/pasteurizacion",
-    element: <DashBoard />,
+    element: <Pasteurizacion/>,
   },
   {
     name: "Preparacion Mezcla",
     path: "/preparacion-mezcla",
-    element: <DashBoard />,
+    element: <PreparacionMezcla/>,
   },
   {
     name: "Zona de Enfriamiento",
     path: "/zona-de-enfriamiento",
-    element: <DashBoard />,
+    element: <></>,
+  },
+  {
+    name: "Zona de Maduracion",
+    path: "/zona-de-maduracion",
+    element: <></>,
   },
   {
     name: "Zona de Congelacion",
     path: "/zona-de-congelacion",
-    element: <DashBoard />,
-  },
-  {
-    name: "Zona de Almacenamiento",
-    path: "/zona-de-almacenamiento",
-    element: <DashBoard />,
-  },
-  {
-    name: "Area de Seguridad",
-    path: "/area-de-seguridad",
-    element: <DashBoard />,
-  },
-  {
-    name: "Oficinas y salas de control",
-    path: "/oficinas-y-salas-de-control",
-    element: <DashBoard />,
-  },
-  {
-    name: "Area de limpieza y mantenimiento",
-    path: "/area-de-limpieza-y-mantenimiento",
-    element: <DashBoard />,
-  },
+    element: <></>,
+  }
 ];

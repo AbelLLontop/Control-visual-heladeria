@@ -116,50 +116,37 @@ const CardTanque = ({
     </div>
   );
 };
-const CardMaquina = ({
-  status,
-  name,
-  count,
-}: {
-  status: number;
-  name: string;
-  count: number;
-}) => {
+const CardMaquina = ({ status, name }: { status: number; name: string }) => {
   return (
     <div className="bg-white p-4 shadow-md rounded-lg flex items-center gap-4">
       <div className="flex items-center flex-col">
-        {status == 1&& (
+        {status == 1 && (
           <>
-          <div className="w-[2rem] h-[2rem] rounded-full flex justify-center items-center bg-green-400  border-2 border-black">
-          </div>
+            <div className="w-[2rem] h-[2rem] rounded-full flex justify-center items-center bg-green-400  border-2 border-black"></div>
             <p className="">operativo</p>
-          
           </>
         )}
         {status == 2 && (
           <>
-          <div className="w-[2rem] h-[2rem] rounded-full flex justify-center items-center bg-red-400 border-2 border-black">
-          </div>
+            <div className="w-[2rem] h-[2rem] rounded-full flex justify-center items-center bg-red-400 border-2 border-black"></div>
             <p className="">Incativo</p>
-          
           </>
         )}
       </div>
 
       <div>
         <h3 className="font-semibold text-lg">{name}</h3>
-        <p>
-        </p>
+        <p></p>
       </div>
     </div>
   );
 };
 
-const DashBoard = () => {
+const PreparacionMateriaPrima = () => {
   return (
     <main>
       <h1 className="text-2xl my-2 font-semibold">
-        Preparacion de Materia Prima
+      Zona de Preparación de Materia Prima
       </h1>
       <p className="my-2">
         Recipientes utilizados para combinar leche, azúcar y emulsionantes
@@ -170,7 +157,7 @@ const DashBoard = () => {
         </div>
       </div>
       <h2 className="font-semibold text-lg my-4">
-        Nivel actual de cada tanque
+        Nivel actual de cada tanque de mezcla
       </h2>
       <div className="grid grid-cols-4 gap-3">
         <CardTanque count={93} name="Tanque 1" status={3} />
@@ -180,16 +167,16 @@ const DashBoard = () => {
       </div>
       <h2 className="font-semibold text-lg my-4">Trituradoras y Equipos</h2>
       <div className="grid grid-cols-4 gap-3">
-        <CardMaquina count={93} name="Molinos de Martillos" status={1} />
-        <CardMaquina count={40} name="Licuadoras" status={2} />
-        <CardMaquina count={63} name="Molinos Coloidales" status={2} />
-        <CardMaquina count={82} name="Máquinas de Corte o Picado" status={1} />
-        <CardMaquina count={82} name="Molinos de Bolas" status={1} />
-        <CardMaquina count={82} name="Tamizadores" status={1} />
-        <CardMaquina count={82} name="Pulverizadores" status={1} />
-        <CardMaquina count={82} name="Mezcladores de Cinta" status={1} />
+        <CardMaquina name="Molinos de Martillos" status={1} />
+        <CardMaquina name="Licuadoras" status={2} />
+        <CardMaquina name="Molinos Coloidales" status={2} />
+        <CardMaquina name="Máquinas de Corte o Picado" status={1} />
+        <CardMaquina name="Molinos de Bolas" status={1} />
+        <CardMaquina name="Tamizadores" status={1} />
+        <CardMaquina name="Pulverizadores" status={1} />
+        <CardMaquina name="Mezcladores de Cinta" status={1} />
       </div>
     </main>
   );
 };
-export default DashBoard;
+export default PreparacionMateriaPrima;
