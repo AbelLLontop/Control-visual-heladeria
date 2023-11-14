@@ -1,3 +1,6 @@
+import Congelacion from "./components/Congelacion";
+import Enfriamiento from "./components/Enfriamiento";
+import Maduracion from "./components/Maduracion";
 import Pasteurizacion from "./components/Pasteurizacion";
 import PreparacionMateriaPrima from "./components/PreparacionMateriaPrima";
 import PreparacionMezcla from "./components/PreparacionMezcla";
@@ -21,16 +24,16 @@ export const routesLinks = [
   {
     name: "Zona de Enfriamiento",
     path: "/zona-de-enfriamiento",
-    element: <></>,
+    element: <Enfriamiento/>,
   },
   {
     name: "Zona de Maduracion",
     path: "/zona-de-maduracion",
-    element: <></>,
+    element: <Maduracion/>,
   },
   {
     name: "Zona de Congelacion",
     path: "/zona-de-congelacion",
-    element: <></>,
+    element: <Congelacion/>,
   }
 ];
