@@ -1,5 +1,20 @@
+import { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
-const CurstomChartTanque = () => {
+import { obtenerNumeroAleatorio } from "../utils/obtenerNumeroAleatorio";
+
+
+interface Tanque {
+  tanque1: number;
+  tanque2: number;
+  temperatura: number;
+  presion: number;
+  nivel: number;
+}
+interface CharTanque{
+  tanque1:number;
+  tanque2:number;
+}
+const CurstomChartTanque = ({tanque1,tanque2}:CharTanque) => {
     return (
       <Chart
         type="bar"
@@ -7,7 +22,7 @@ const CurstomChartTanque = () => {
         series={[
           {
             name: "Views",
-            data: [50, 20],
+            data: [tanque1, tanque2],
           },
         ]}
         options={{
@@ -45,6 +60,7 @@ const CurstomChartTanque = () => {
             categories: ["TANQUE 1", "TANQUE 2"],
           },
           yaxis: {
+            max:100,
             labels: {
               style: {
                 colors: "#fff",
@@ -78,23 +94,24 @@ const CurstomChartTanque = () => {
   };
 
   const CardTanque = ({
-    status,
     name,
     count,
   }: {
-    status: number;
     name: string;
     count: number;
   }) => {
+    const status = count > 80 ? 3 : count > 50 ? 2 : 1;
+
+
     return (
       <div className="bg-white p-4 shadow-md rounded-lg flex items-center gap-4">
         <div className="flex gap-2 items-center">
-          {status == 1 && (
+          {status == 2 && (
             <div className="w-[4rem] h-[4rem] rounded-full flex justify-center items-center bg-yellow-400 outline-dashed ">
               <p className="font-bold">{count}%</p>
             </div>
           )}
-          {status == 2 && (
+          {status == 1 && (
             <div className="w-[4rem] h-[4rem] rounded-full flex justify-center items-center bg-green-400 outline-dashed ">
               <p className="font-bold">{count}%</p>
             </div>
@@ -158,12 +175,12 @@ const CustomChart = ({
           colors: [getColor()],
           plotOptions: {
             radialBar: {
-              startAngle: -90,
-              endAngle: 90,
+              startAngle: 0,
+              endAngle: 360,
               track: {
                 background: "#333",
-                startAngle: -90,
-                endAngle: 90,
+                startAngle: 0,
+                endAngle: 360,
               },
               dataLabels: {
                 name: {
@@ -197,6 +214,27 @@ const CustomChart = ({
 };
 
 const Pasteurizacion = () => {
+  const [tanqueState,setTanqueState] = useState<Tanque>({
+    tanque1: 73,
+    tanque2: 40,
+    temperatura: 63,
+    presion: 79,
+    nivel: 79,
+  })
+  useEffect(()=>{
+    const interval = setInterval(()=>{
+      setTanqueState({
+        tanque1: obtenerNumeroAleatorio(tanqueState.tanque1),
+        tanque2: obtenerNumeroAleatorio(tanqueState.tanque2),
+        temperatura: obtenerNumeroAleatorio(tanqueState.temperatura),
+        presion: obtenerNumeroAleatorio(tanqueState.presion),
+        nivel: obtenerNumeroAleatorio(tanqueState.nivel),
+      })
+    },360)
+    return ()=> clearInterval(interval)
+
+  },[])
+
   return (
     <main>
       <h1 className="text-2xl my-2 font-semibold">Zona de Pasteurización</h1>
@@ -220,29 +258,27 @@ const Pasteurizacion = () => {
         </div>
       </div>
       <div className="grid grid-cols-3 ">
-        <CustomChart name="Temperatura" temperature={10} />
-        <CustomChart name="Precion" temperature={80} />
-        <CustomChart name="Nivel de Mezcla" temperature={90} />
+        <CustomChart name="Temperatura" temperature={tanqueState.temperatura} />
+        <CustomChart name="Presion" temperature={tanqueState.presion} />
+        <CustomChart name="Nivel de Mezcla" temperature={tanqueState.nivel} />
       </div>
       <h2 className="font-semibold text-lg my-4">
       Tanques de Almacenamiento Temporal:
       </h2>
       <div className="bg-[#3ea2f3] rounded-lg text-black">
-        <CurstomChartTanque/>
+        <CurstomChartTanque tanque1={tanqueState.tanque1} tanque2={tanqueState.tanque2}/>
         </div>
        
       <h2 className="font-semibold text-lg my-4">Nivel de Almacenamiento</h2>
       <div className="grid grid-cols-2 gap-3">
        <CardTanque
-       count={93}
+       count={tanqueState.tanque1}
          name="Tanque 1"
-            status={3}
 
        />
         <CardTanque
-        count={40}
+        count={tanqueState.tanque2}
         name="Tanque 2"
-        status={2}
         />
       </div>
     </main>

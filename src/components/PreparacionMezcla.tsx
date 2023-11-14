@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
+import { obtenerNumeroAleatorio } from "../utils/obtenerNumeroAleatorio";
 const CustomChartCircle = ({
   temperature,
   name,
@@ -40,12 +42,12 @@ const CustomChartCircle = ({
           colors: [getColor()],
           plotOptions: {
             radialBar: {
-              startAngle: -90,
-              endAngle: 90,
+              startAngle: 0,
+              endAngle: 360,
               track: {
                 background: "#333",
-                startAngle: -90,
-                endAngle: 90,
+                startAngle: 0,
+                endAngle: 360,
               },
               dataLabels: {
                 name: {
@@ -77,7 +79,15 @@ const CustomChartCircle = ({
     </div>
   );
 };
-const CurstomChart = () => {
+
+
+interface CharTanque{
+  tanque1:number;
+  tanque2:number;
+  tanque3:number;
+  tanque4:number;
+}
+const CurstomChart = ({tanque1,tanque2,tanque3,tanque4}:CharTanque) => {
   return (
     <Chart
       type="bar"
@@ -85,7 +95,7 @@ const CurstomChart = () => {
       series={[
         {
           name: "Views",
-          data: [50, 20, 10, 22],
+          data: [tanque1, tanque2, tanque3, tanque4],
         },
       ]}
       options={{
@@ -128,6 +138,7 @@ const CurstomChart = () => {
           ],
         },
         yaxis: {
+          max: 100,
           labels: {
             style: {
               colors: "#fff",
@@ -159,9 +170,39 @@ const CurstomChart = () => {
     />
   );
 };
-
+interface Tanque {
+  tanque1: number;
+  tanque2: number;
+  tanque3: number;
+  tanque4: number;
+  eficiencia: number;
+  capacidad: number;
+}
 
 const PreparacionMezcla = () => {
+  const [tanqueState,setTanqueState] = useState<Tanque>({
+    tanque1: 60,
+    tanque2: 40,
+    tanque3: 20,
+    tanque4: 72,
+    eficiencia: 20,
+    capacidad: 40,
+  })
+  
+  useEffect(()=>{
+    const interval = setInterval(()=>{
+      setTanqueState({
+        tanque1: obtenerNumeroAleatorio(tanqueState.tanque1),
+        tanque2: obtenerNumeroAleatorio(tanqueState.tanque2),
+        tanque3: obtenerNumeroAleatorio(tanqueState.tanque3),
+        tanque4: obtenerNumeroAleatorio(tanqueState.tanque4),
+        eficiencia: obtenerNumeroAleatorio(tanqueState.eficiencia),
+        capacidad: obtenerNumeroAleatorio(tanqueState.capacidad),
+      })
+    },360)
+    return ()=> clearInterval(interval)
+
+  },[])
   return (
     <main>
       <h1 className="text-2xl my-2 font-semibold">
@@ -187,8 +228,8 @@ const PreparacionMezcla = () => {
         </div>
       </div>
       <div className="flex">
-        <CustomChartCircle name="Eficiencia de Batido" temperature={80} />
-        <CustomChartCircle name="Capacidad total" temperature={40} />
+        <CustomChartCircle name="Eficiencia de Batido" temperature={tanqueState.eficiencia} />
+        <CustomChartCircle name="Capacidad total" temperature={tanqueState.capacidad} />
         <div>
         <div className="text-center">
           <div className="text-2xl font-semibold">280 RPM</div>
@@ -206,7 +247,12 @@ const PreparacionMezcla = () => {
       </div> */}
       <h2 className="font-semibold text-lg my-4">Adicion de Ingredientes</h2>
       <div className="bg-[#3ea2f3] rounded-lg text-black">
-        <CurstomChart />
+        <CurstomChart 
+        tanque1={tanqueState.tanque1}
+        tanque2={tanqueState.tanque2}
+        tanque3={tanqueState.tanque3}
+        tanque4={tanqueState.tanque4}
+        />
       </div>
       {/* <div className="grid grid-cols-4 gap-3">
         <CardMaquina name="Molinos de Martillos" status={1} />
