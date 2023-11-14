@@ -1,135 +1,200 @@
-import React from "react";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  BarChart,
-  Bar,
-  PieChart,
-  Pie,
-} from "recharts";
+import { useEffect, useState } from "react";
+import Chart from "react-apexcharts";
+import { obtenerNumeroAleatorio } from "../utils/obtenerNumeroAleatorio";
 
-interface TemperatureData {
-  time?: string;
-  temperature1?: number;
-  temperature2?: number;
+
+
+interface Tanque {
+  valvula1: number;
+  valvula2: number;
+  valvula3: number;
+  valvula4: number;
 }
 
-interface TemperatureByEquipment {
-  equipment?: string;
-  temperature?: number;
-}
-
-interface TemperatureDistribution {
-  equipment?: string;
-  temperature?: number;
-}
-
-interface CombinedChartProps {
-  lineChartData: TemperatureData[];
-  barChartData: TemperatureByEquipment[];
-  pieChartData: TemperatureDistribution[];
-}
-
-const CombinedChart: React.FC<CombinedChartProps> = ({
-  lineChartData,
-  barChartData,
-  pieChartData,
-}) => {
+const CurstomChart = ({valvula1,valvula2,valvula3,valvula4}:Tanque) => {
   return (
-    <div>
-      <h1 className="text-2xl my-2 font-bold" >Equipos de Control</h1>
-      <h2 className="text-2xl my-2 font-semibold" >Indicadores de Tiempo</h2>
-      {/* Line Chart */}
-      <LineChart width={800} height={400} data={lineChartData}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="time" />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        <Line type="monotone" dataKey="temperature1" stroke="#8884d8" />
-        <Line type="monotone" dataKey="temperature2" stroke="#82ca9d" />
-      </LineChart>
-      <h2 className="text-2xl my-2 font-semibold" >Indicadores de Temperatura</h2>
-      {/* Bar Chart */}
-      <BarChart width={600} height={300} data={barChartData}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="equipment" />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        <Bar dataKey="temperature" fill="#8884d8" />
-      </BarChart>
-      <h2 className="text-2xl my-2 font-semibold" >Temperaturas Máximas</h2>
+    <Chart
+      type="bar"
+      height={220}
+      
+      series={[
+        {
+          name: "Views",
+          data: [valvula1, valvula2, valvula3, valvula4],
+        },
+      ]}
+      options={{
+        
+        chart: {
+          toolbar: {
+            show: false,
+          },
+          
+        },
 
-      {/* Pie Chart */}
-      <PieChart width={400} height={400}>
-        <Pie
-          data={pieChartData}
-          dataKey="temperature"
-          cx={200}
-          cy={200}
-          outerRadius={80}
-          fill="#8884d8"
-          label
-        />
-        <Tooltip />
-      </PieChart>
+        title: {},
+        dataLabels: {
+          enabled: false,
+        },
+        plotOptions: {
+          bar: {
+            columnWidth: "16%",
+            borderRadius: 5,
+          },
+        },
+        xaxis: {
+          axisTicks: {
+            show: false,
+          },
+          axisBorder: {
+            show: false,
+          },
+          labels: {
+            style: {
+              colors: "#fff",
+              fontSize: "13px",
+              fontFamily: "inherit",
+              fontWeight: 500,
+            },
+          },
+          categories: ["VALVULA 1", "VALVULA 2", "VALVULA 3", "VALVULA 4"],
+        },
+        yaxis: {
+          max: 100,
+          labels: {
+            style: {
+              colors: "#fff",
+              fontSize: "13px",
+              fontFamily: "inherit",
+              fontWeight: 300,
+            },
+          },
+        },
+        grid: {
+          show: true,
+          borderColor: "#ffffff6d",
+          strokeDashArray: 5,
+          xaxis: {
+            lines: {
+              show: true,
+            },
+          },
+          padding: {
+            top: 5,
+            right: 20,
+          },
+        },
+        fill: {
+          opacity: 0.8,
+          colors: ["#fff"],
+        },
+      }}
+    />
+  );
+};
+
+const CardTanque = ({
+  name,
+  count,
+}: {
+  name: string;
+  count: number;
+}) => {
+  const status = count > 70 ? 3 : count > 60 ? 2 : 1;
+  return (
+    <div className="bg-white p-4 shadow-md rounded-lg flex items-center gap-4">
+      <div className="flex gap-2 items-center">
+        {status == 2 && (
+          <div className="w-[4rem] h-[4rem] rounded-full flex justify-center items-center bg-yellow-400 outline-dashed ">
+            <p className="font-bold">{count}%</p>
+          </div>
+        )}
+        {status == 1 && (
+          <div className="w-[4rem] h-[4rem] rounded-full flex justify-center items-center bg-green-400 outline-dashed ">
+            <p className="font-bold">{count}%</p>
+          </div>
+        )}
+        {status == 3 && (
+          <div className="w-[4rem] h-[4rem] rounded-full flex justify-center items-center bg-red-400 outline-dashed ">
+            <p className="font-bold">{count}%</p>
+          </div>
+        )}
+      </div>
+
+      <div>
+        <h3 className="font-semibold text-lg">{name}</h3>
+        <p>
+          <span>Estado:</span> <span>Activo</span>
+        </p>
+      </div>
     </div>
   );
 };
 
-export default function Congelacion() {
-  const lineChartData: TemperatureData[] = [
-    { time: "00:00", temperature1: 0, temperature2: 0 },
-    { time: "01:00", temperature1: 70, temperature2: 82 },
-    { time: "02:00", temperature1: 150, temperature2: 162 },
-    { time: "03:00", temperature1: 170, temperature2: 182 },
-    { time: "04:00", temperature1: 230, temperature2: 258 },
-    { time: "05:00", temperature1: 280, temperature2: 310 },
-    { time: "06:00", temperature1: 320, temperature2: 362 },
-    { time: "07:00", temperature1: 370, temperature2: 412 },
-    { time: "08:00", temperature1: 400, temperature2: 442 },
-    { time: "09:00", temperature1: 450, temperature2: 492 },
-    { time: "10:00", temperature1: 490, temperature2: 542 },
-    { time: "11:00", temperature1: 520, temperature2: 572 },
-    { time: "12:00", temperature1: 560, temperature2: 612 },
-    { time: "13:00", temperature1: 600, temperature2: 652 },
-    { time: "14:00", temperature1: 640, temperature2: 692 },
-    { time: "15:00", temperature1: 670, temperature2: 722 },
-    { time: "16:00", temperature1: 710, temperature2: 762 },
-    { time: "17:00", temperature1: 750, temperature2: 802 },
-    { time: "18:00", temperature1: 790, temperature2: 842 },
-    { time: "19:00", temperature1: 820, temperature2: 872 },
-    { time: "20:00", temperature1: 860, temperature2: 912 },
-    { time: "21:00", temperature1: 900, temperature2: 952 },
-    { time: "22:00", temperature1: 940, temperature2: 992 },
-    { time: "23:00", temperature1: 980, temperature2: 1032 },
-    { time: "24:00", temperature1: 1020, temperature2: 1072 },
-    // ... Más datos
-  ];
 
-  const barChartData: TemperatureByEquipment[] = [
-    { equipment: "Valvula A", temperature: 225 },
-    { equipment: "Valvula B", temperature: 300 },
-    // ... Más datos
-  ];
 
-  const pieChartData: TemperatureDistribution[] = [
-    { equipment: "Valvula A", temperature: 225 },
-    { equipment: "Valvula B", temperature: 310 },
-    // ... Más datos
-  ];
 
+const PreparacionMateriaPrima = () => {
+  const [tanqueState,setTanqueState] = useState<Tanque>({
+    valvula1: 73,
+    valvula2: 40,
+    valvula3: 63,
+    valvula4: 79,
+  })
+  useEffect(()=>{
+    const interval = setInterval(()=>{
+      setTanqueState({
+        valvula1: obtenerNumeroAleatorio(tanqueState.valvula1),
+        valvula2: obtenerNumeroAleatorio(tanqueState.valvula2),
+        valvula3: obtenerNumeroAleatorio(tanqueState.valvula3),
+        valvula4: obtenerNumeroAleatorio(tanqueState.valvula4),
+      })
+    },360)
+    return ()=> clearInterval(interval)
+
+  },[])
+
+
+  
   return (
-    <CombinedChart
-      lineChartData={lineChartData}
-      barChartData={barChartData}
-      pieChartData={pieChartData}
-    />
+    <main>
+      <h1 className="text-2xl my-2 font-semibold">
+      Equipo de Congelamiento
+      </h1>
+      <p className="my-2">
+        Valvulas en funcionamiento 
+      </p>
+      <div>
+        <div className="bg-[#3ea2f3] rounded-lg text-black">
+          <CurstomChart valvula1={tanqueState.valvula1} valvula2={tanqueState.valvula2} valvula3={tanqueState.valvula3} valvula4={tanqueState.valvula4} />
+        </div>
+      </div>
+      <h2 className="font-semibold text-lg my-4">
+        Temperatura funcional de las Valvulas 
+      </h2>
+      <div className="flex items-center gap-2 mb-4">
+      <div className="flex items-center gap-2">
+          <div className="w-4 h-4 bg-green-600 rounded-sm"></div>Estable
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 bg-yellow-400 rounded-sm"></div>Regular
+        </div>
+      
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 bg-red-600 rounded-sm"></div>Critico
+        </div>
+      </div>
+      <div className="grid grid-cols-4 gap-3">
+        <CardTanque count={tanqueState.valvula1} name="Valvula 1" />
+        <CardTanque count={tanqueState.valvula2} name="Valvula 2"  />
+        <CardTanque count={tanqueState.valvula3} name="Valvula 3" />
+        <CardTanque count={tanqueState.valvula4} name="Valvula 4"/>
+      </div>
+      
+      
+
+      
+    </main>
   );
-}
+};
+export default PreparacionMateriaPrima;
